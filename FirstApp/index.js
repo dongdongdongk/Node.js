@@ -2,7 +2,6 @@ const express = require("express");
 //Express를 불러와서 변수에 저장 (일반적으로 app 변수로 명명)
 const app = express();
 //객체의 속성을 트리 구조로 표시
-console.dir(app)
 
 //.use 들어오는 요청이 있다면 무조건 응답
 // app.use(() => {
@@ -13,11 +12,14 @@ app.get('/',(req,res) => {
 })
 
 app.get('/search', (req,res) => {
-    const { q } = req.query;
+    const { q, color} = req.query;
     if(!q) {
-        res.send('쿼리가 없습니다.')
+    res.send('q 가 없습니다.')
     }
-    res.send(`<h1>쿼리 결과는 : ${q} </h1>`)
+    if(!color) {
+    res.send('color 가 없습니다.')
+    }
+    res.send(`<h1>쿼리 결과는 : ${q} color 는 : ${color} </h1>`)
 })
 
 
