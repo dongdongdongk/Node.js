@@ -1,8 +1,9 @@
 import './App.css'
-import Counter from './Counter'
+import EmojiClicker from './EmojiClicker'
+import ScoreKeeper from './ScoreKepper'
 function App() {
   return (
-    <Counter/>
+    <EmojiClicker/>
   )
 }
 
