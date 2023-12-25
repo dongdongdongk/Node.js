@@ -8,15 +8,22 @@ function SignUpForm(){
     const updateLastName = (e) => {
         setLastName(e.target.value);
     }
+    const handleSubmit = () => {
+        console.log(firstName,lastName);
+    }
 
 
     return (
         <div>
-            <label htmlFor="username">Enter a username</label>
-            <input type="text" placeholder="username" value={username} onChange={updateUsername} id="username"/>
-            <button>Submit</button>
+            <label htmlFor="firstName">First Name</label>
+            <input type="text" placeholder="firstName" value={firstName} onChange={updateFirstName} id="firstName"/>
+            <button onClick={handleSubmit}>Submit</button>
+            
+            <label htmlFor="lastName">Last Name</label>
+            <input type="text" placeholder="lastName" value={lastName} onChange={updateLastName} id="lastName"/>
+            <button onClick={handleSubmit}>Submit</button>
         </div>
     )
 }
 
-export default UsernameForm;
+export default SignUpForm;
