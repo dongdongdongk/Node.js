@@ -1,23 +1,18 @@
 import './App.css';
-import CommentList2 from './CommentList2';
-import { useEffect,useState } from "react";
-import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import AddUser from './pages/AddUser';
+import { Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
 
 
 
 function App() {
-  const[comments, setComments] = useState([]);
-  const fetchData = async () => {
-    const res = await axios.get('http://localhost:4000/comments');
-    setComments(res.data);
-  };
-useEffect(() => {fetchData()},[]);
 
   return (
-    <>
-      <h1>List</h1>
-      <CommentList2 comments={comments}/>
-    </>
+    <Routes>
+      <Route path='/' element={<Home />}/>
+      <Route path='/AddUser' element={<AddUser />}/>
+    </Routes>
   );
 }
 

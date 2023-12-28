@@ -36,6 +36,15 @@ app.get('/comments', (req,res) => {
     res.json(comments);
 });
 
+// 댓글 추가 
+app.post('/comments/new',(req,res) => {
+    const { username, comment} = req.body;
+    comments.push({
+        username,
+        comment
+    });
+    return res.send("Success");
+});
 
 
 app.listen(4000, () =>{
