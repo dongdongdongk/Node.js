@@ -1,33 +1,26 @@
 import { useEffect,useState } from "react";
+import axios from 'axios';
 
 function App() {
   const[todoList, setTodoList] = useState([]);
 
   // 재사용을 위해서 함수를 따로 빼줬다 
-  const fetchData = () => {
-    fetch('http://localhost:4000/api/todo')
-      .then((response) => response.json())
-      .then((data) => setTodoList(data));
-  }
+  const fetchData = async () => {
+    const response = await axios.get('http://localhost:4000/api/todo');
+    setTodoList(response.data);
+  };
   
   // 이제 함수를 받아서 실행 
   useEffect(() => {fetchData()},[]);
 
-     const onSubmitHandler = (e) => {
+     const onSubmitHandler = async (e) => {
       e.preventDefault();
       const text = e.target.text.value;
       const done = e.target.done.checked;
-      fetch('http://localhost:4000/api/todo',{
-        method : 'POST',
-        headers : {
-          'Content-Type' : 'application/json',
-        },
-        body : JSON.stringify({
-          text,
-          done,
-        }),
-      }).then(() => fetchData()); // 요청이 끝나면 다시 랜더링 
-     }
+      
+      await axios.post('http://localhost:4000/api/todo',{text, done});
+      fetchData();
+     };
     
   return (
     <div className="App">
