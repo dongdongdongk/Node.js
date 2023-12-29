@@ -4,7 +4,7 @@ function CommentList2({ comments }) {
     return (
         <div>
             {comments.map((comment) => (
-                <Link to={`/profile/${comment.username}`}>
+                <Link to={`/profile/${comment.id}`}>
                     <Comment username={comment.username} comment={comment.comment} />
                 </Link>
             ))}
