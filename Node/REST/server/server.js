@@ -9,25 +9,30 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 const comments = [
     {
+        id : 1,
         username : '동현',
         comment : '가나다라마바'
     },
 
     {
-        username : '민수1',
-        comment : '민수가 1 입니다'
-    },
-    {
+        id : 2,
         username : '민수2',
         comment : '민수가 2 입니다'
     },
     {
-        username : '민수2',
-        comment : '민수가 2 입니다'
+        id : 3,
+        username : '민수3',
+        comment : '민수가 3 입니다'
     },
     {
-        username : '민수2',
-        comment : '민수가 2 입니다'
+        id : 4,
+        username : '민수4',
+        comment : '민수가 4 입니다'
+    },
+    {
+        id: 5,
+        username : '민수5',
+        comment : '민수가 5 입니다'
     }
 ]
 
@@ -43,7 +48,15 @@ app.post('/comments/new',(req,res) => {
         username,
         comment
     });
+    //res.redirect("/")
     return res.send("Success");
+});
+
+// 상세 조회
+app.get('/profile/:username', (req, res) => {
+    const { username } = req.params;
+    const comment = comments.find(c => c.username === username);
+    res.json(comment)
 });
 
 

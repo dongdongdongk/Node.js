@@ -1,11 +1,16 @@
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
+import { Link, useNavigate } from 'react-router-dom'; // useHistory 대신 useNavigate 사용
 function AddUser() {
+
+    const navigate = useNavigate(); // useNavigate를 사용
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         const username = e.target.username.value;
         const comment = e.target.comment.value;
         await axios.post('http://localhost:4000/comments/new', { username, comment });
+        // 추가가 성공하면 페이지를 리디렉션
+        navigate('/');
     }
     return (
         <div>
@@ -21,6 +26,7 @@ function AddUser() {
                 </Form.Group>
                 <input type='submit' value='추가' />
             </Form>
+            <Link to="/">홈으로</Link>
         </div>
 
 
