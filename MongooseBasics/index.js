@@ -14,7 +14,7 @@ const movieSchema = new mongoose.Schema({
     score: Number,
     rating: String
 
-})
+});
 
 const Movie = mongoose.model('Movie', movieSchema);
 
@@ -23,4 +23,20 @@ const amadeus = new Movie({
     year: 1986,
     score: 9.2,
     rating: 'R'
-})
+});
+
+amadeus.save()
+  .then(movie => {
+    console.log('Movie saved:', movie);
+  })
+  .catch(error => {
+    console.error('Error saving movie:', error);
+  });
+
+  Movie.insertMany([
+    {title : 'Amelia', year : 2001, score : 8.3, rating : 'R'},
+    {title : 'Alien', year : 1979, score : 8.1, rating : 'R'},
+    {title : 'Amelia3', year : 2001, score : 8.3, rating : 'R'},
+    {title : 'Amelia5', year : 2031, score : 3.3, rating : 'R'},
+    {title : 'Amelia6', year : 2041, score : 6.3, rating : 'R'},
+  ]);
