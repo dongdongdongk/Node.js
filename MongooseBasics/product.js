@@ -10,24 +10,42 @@ async function main() {
 const productSchema = new mongoose.Schema({
     name : {
         type : String,
-        required : true,
+        required : true, // 값이 필수적임
+        maxlength : 20
     },
     price : {
-        type : Number
-    }
-
+        type : Number,
+        required : true,
+        min : 0
+    },
+    onSale : {
+        type : Boolean,
+        default : false
+    },
+    categories : [String],
+    gty : {
+        online : {
+            type : Number,
+            default : 0
+        },
+        inStore : {
+            type : Number,
+            default : 0
+        }
+    } 
 });
 
 
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema); //  모델 정의 
 
-const bike = new Product({price : 300});
+const bike = new Product({name : 'Bike Helmet', price : 455, categories : ['Cycling', 'Safety']}); // 상품 생성 및 저장
 
 bike.save()
     .then(data =>{
-        console.log("성공"); 
+        console.log("Success"); 
+        console.log(data);
     })
     .catch(err =>{
         console.log("error")
-        console.log(err)
+        console.log(err.errors.name.properties.message)
     });
