@@ -3,9 +3,9 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express();
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors()) // cors
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // 쿼리스트링 
 // getting-started.js
 const mongoose = require('mongoose');
 
@@ -18,10 +18,18 @@ async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/farmStand'); // 마지막 부분이 DB명
     console.log("Mongo Connect Success")
 }
-
 // 삼품 조회
 app.get('/products', async (req,res) => {
-    const products = await Product.find({})
+    const { category } = req.query;
+    let products;
+    console.log("category" + category)
+    if (category) {
+        // 카테고리가 제공된 경우 해당 카테고리에 속한 상품을 조회
+       products = await Product.find({ category });
+    } else {
+        // 카테고리가 제공되지 않은 경우 모든 상품 조회
+       products = await Product.find({});
+    }
     console.log(products);
     res.send(products);
 });

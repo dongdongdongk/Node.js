@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 const ProductDetailPage = () => {
     const params = useParams();
@@ -9,22 +9,22 @@ const ProductDetailPage = () => {
 
     useEffect(() => {
         fetch(`http://localhost:4000/products/${params.id}`)
-        .then((response) => response.json())
-        .then((data) => setProduct(data))
-        .catch((error) => {
-            console.error('상품 정보를 불러오는 데 실패했습니다.', error);
-            setProduct(null);
-        });
+            .then((response) => response.json())
+            .then((data) => setProduct(data))
+            .catch((error) => {
+                console.error('상품 정보를 불러오는 데 실패했습니다.', error);
+                setProduct(null);
+            });
     }, [params.id]);
     const deleteProduct = async () => {
-        try{
+        try {
             await axios.delete(`http://localhost:4000/product/${params.id}`);
             navigate("/products");
-        } catch(error) {
-            console.error('DELETE FAIL',error);
+        } catch (error) {
+            console.error('DELETE FAIL', error);
         }
     }
-    
+
     return (
         <div>
             {product ? (
@@ -32,7 +32,9 @@ const ProductDetailPage = () => {
                     <h1>{product.name}</h1>
                     <ul>
                         <li>Price : {product.price}</li>
-                        <li>Category : {product.category}</li>
+                        <Link to={`/products?category=${product.category}`}>
+                            Category : {product.category}
+                        </Link>
                     </ul>
                 </>
             ) : (
