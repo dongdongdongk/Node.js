@@ -10,6 +10,7 @@ function App() {
       <Route path='/products' element={<ProductPage />}/>
       <Route path='/product/:id' element={<ProductDetailPage />}/>
       <Route path='/product/new' element={<ProductAddPage />}/>
+      <Route path='/product/:id/edit' element={<ProductUpdatePage />}/>
     </Routes>
   );
 }

@@ -46,6 +46,55 @@ app.post("/product/new", async (req,res) => {
     res.send("making your product");
 }) ;
 
+// 상품 업데이트 
+app.get("/product/:id/edit" , async (req,res) => {
+    const product = await Product.findById(id);
+    res.send(product);
+});
+
+// 상품 업데이트 
+app.put("/product/:id", async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // findByIdAndUpdate 대신 findById 와 save 를 사용하여 업데이트
+        const product = await Product.findById(id);
+
+        if (!product) {
+            return res.status(404).send("상품을 찾을 수 없습니다.");
+        }
+
+        // 업데이트할 데이터 적용
+        product.set(req.body);
+
+        // 업데이트된 상품 저장
+        await product.save();
+
+        // 업데이트된 상품을 클라이언트에게 보냄
+        res.send(product);
+    } catch (error) {
+        console.error('상품 업데이트 중 오류 발생:', error);
+        res.status(500).send("상품 업데이트 중 오류 발생");
+    }
+});
+
+// 상품 삭제 
+app.delete("/product/:id", async (req,res) => {
+    const { id } = req.params;
+    try {
+        const result = await Product.deleteOne({ _id: id });
+        // 삭제 성공 여부에 따라 응답
+        if (result.deletedCount > 0) {
+            res.status(200).send("DELETE SUCCESS");
+        } else {
+            res.status(404).send("ID NOT FOUND");
+        }
+    } catch (error) {
+        console.error('DELETE FAIL');
+        res.status(500).send("DELETE FAIL")
+    }    
+});
+
 
 app.listen(4000, () =>{
     console.log("Success");
