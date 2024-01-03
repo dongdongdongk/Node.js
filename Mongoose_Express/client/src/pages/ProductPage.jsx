@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams  } from 'react-router-dom';
-const ProductPage = () => {
+import { Link, useSearchParams } from 'react-router-dom';
 
+const ProductPage = () => {
     const [searchParams] = useSearchParams();
     const category = searchParams.get('category');
     const [products, setProducts] = useState([]);
+
     useEffect(() => {
-        console.log("카테고리는",category)
-        fetch('http://localhost:4000/products')
+        const apiUrl = category ? `http://localhost:4000/products?category=${category}` : 'http://localhost:4000/products';
+
+        fetch(apiUrl)
             .then((response) => response.json())
             .then((data) => setProducts(data));
-    }, []);
+    }, [category]);
 
     return (
         <>
-            <h1>ProductPage</h1>
+            <h1>{category ? `${category}Page` : 'AllPage'}</h1>
             <ul>
                 {products.map((product) => (
                     <li key={product._id}>
@@ -23,10 +25,9 @@ const ProductPage = () => {
                 ))}
             </ul>
             <Link to={"/product/new"}>상품등록</Link>
+            {category && <Link to={"/products"}>AllPage</Link>}
         </>
-        
-        
-    )
+    );
 }
 
 export default ProductPage;
