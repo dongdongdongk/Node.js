@@ -10,6 +10,7 @@ const ProductAddPage = () => {
         price: '',
         category: 'fruit' // 기본값 설정
     });
+    const [error, setError] = useState(null);
 
     // 입력값 변경 시 상태 업데이트
     const handleChange = (e) => {
@@ -32,42 +33,51 @@ const ProductAddPage = () => {
             navigate('/products');
         } catch (error) {
             console.error('상품 추가 중 오류 발생:', error);
+            setError(error.message)
         }
     };
 
     return (
         <>
-            <h1>ProductAddPage</h1>
-            <form onSubmit={onSubmitHandler}>
-                <label htmlFor="name">ProductName</label>
-                <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                />
-                <label htmlFor="price">Price</label>
-                <input
-                    type="number"
-                    name="price"
-                    id="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                />
-                <label htmlFor="category">Category</label>
-                <select
-                    name="category"
-                    id="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                >
-                    <option value="fruit">fruit</option>
-                    <option value="vegetable">vegetable</option>
-                    <option value="dairy">dairy</option>
-                </select>
-                <input type="submit" value="상품추가" />
-            </form>
+            {error ? <p>Error : {error} </p> : 
+            
+            
+            
+            <div>
+                <h1>ProductAddPage</h1>
+                <form onSubmit={onSubmitHandler}>
+                    <label htmlFor="name">ProductName</label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                    />
+                    <label htmlFor="price">Price</label>
+                    <input
+                        type="number"
+                        name="price"
+                        id="price"
+                        value={formData.price}
+                        onChange={handleChange}
+                    />
+                    <label htmlFor="category">Category</label>
+                    <select
+                        name="category"
+                        id="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                    >
+                        <option value="fruit">fruit</option>
+                        <option value="vegetable">vegetable</option>
+                        <option value="dairy">dairy</option>
+                    </select>
+                    <input type="submit" value="상품추가" />
+                </form>
+            </div>
+            
+            }
         </>
     );
 

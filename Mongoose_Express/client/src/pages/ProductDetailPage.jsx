@@ -5,6 +5,7 @@ import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom'
 const ProductDetailPage = () => {
     const params = useParams();
     const [product, setProduct] = useState(null);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,7 +14,7 @@ const ProductDetailPage = () => {
             .then((data) => setProduct(data))
             .catch((error) => {
                 console.error('상품 정보를 불러오는 데 실패했습니다.', error);
-                setProduct(null);
+                setError(error.message);
             });
     }, [params.id]);
     const deleteProduct = async () => {
@@ -27,6 +28,8 @@ const ProductDetailPage = () => {
 
     return (
         <div>
+
+            {error && <p>Error : {error} </p>}
             {product ? (
                 <>
                     <h1>{product.name}</h1>

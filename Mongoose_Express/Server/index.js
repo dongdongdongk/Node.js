@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express();
+const AppError = require('./AppError');
 
 app.use(cors()) // cors
 app.use(express.urlencoded({ extended: true }));
@@ -19,43 +20,57 @@ async function main() {
     console.log("Mongo Connect Success")
 }
 // 삼품 조회
-app.get('/products', async (req,res) => {
+app.get('/products', async (req, res) => {
     const { category } = req.query;
     let products;
     console.log("category" + category)
     if (category) {
         // 카테고리가 제공된 경우 해당 카테고리에 속한 상품을 조회
-       products = await Product.find({ category });
+        products = await Product.find({ category });
     } else {
         // 카테고리가 제공되지 않은 경우 모든 상품 조회
-       products = await Product.find({});
+        products = await Product.find({});
     }
     console.log(products);
     res.send(products);
 });
 
+function wrapAsync (fn) {
+    return function(req, res, next) {
+        fn(req, res, next).catch(e => next(e));
+    }
+}
+
+
 // 상품 상세 조회
-app.get('/products/:id', async (req,res) => {
+app.get('/products/:id',wrapAsync (async (req, res, next) => {
     const { id } = req.params;
     const product = await Product.findById(id)
-    console.log(product);
+    if (!product) {
+        throw new AppError('Product Not Found', 404);
+    }
     res.send(product);
-});
+}));
 
 // 상품 추가 (필요없을듯)
-app.get("/product/new", async (req,res) =>{
+app.get("/product/new", async (req, res) => {
     console.log("UPDATE PAGE");
 });
 
 // 상품 추가
-app.post("/product/new", async (req,res) => {
-    const newProduct = new Product(req.body);
-    await newProduct.save();
-    res.send("making your product");
-}) ;
+app.post("/product/new", async (req, res, next) => {
+    try {
+        const newProduct = new Product(req.body);
+        await newProduct.save();
+        res.send("making your product");
+    } catch (error) {
+        const customError = new AppError('Failed to fetch data', 500)
+        next(customError);
+    }
+});
 
 // 상품 업데이트 
-app.get("/product/:id/edit" , async (req,res) => {
+app.get("/product/:id/edit", async (req, res) => {
     const product = await Product.findById(id);
     res.send(product);
 });
@@ -87,7 +102,7 @@ app.put("/product/:id", async (req, res) => {
 });
 
 // 상품 삭제 
-app.delete("/product/:id", async (req,res) => {
+app.delete("/product/:id", async (req, res) => {
     const { id } = req.params;
     try {
         const result = await Product.deleteOne({ _id: id });
@@ -100,10 +115,15 @@ app.delete("/product/:id", async (req,res) => {
     } catch (error) {
         console.error('DELETE FAIL');
         res.status(500).send("DELETE FAIL")
-    }    
+    }
 });
 
+app.use((err, req, res, next) => {
+    const { status = 500, message = 'Something went wrong' } = err;
+    res.status(status).send(message);
+})
 
-app.listen(4000, () =>{
+
+app.listen(4000, () => {
     console.log("Success");
 })
