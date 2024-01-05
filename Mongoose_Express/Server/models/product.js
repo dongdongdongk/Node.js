@@ -4,7 +4,7 @@ const mongoose = require('mongoose'); // 몽구스를 요청, DB연결은 필요
 const productSchema = new mongoose.Schema({
     name : {
         type : String,
-        required : true
+        required : [true, 'name cannot be blank']
     },
     price : {
         type : Number,

@@ -35,15 +35,15 @@ app.get('/products', async (req, res) => {
     res.send(products);
 });
 
-function wrapAsync (fn) {
-    return function(req, res, next) {
+function wrapAsync(fn) {
+    return function (req, res, next) {
         fn(req, res, next).catch(e => next(e));
     }
 }
 
 
 // 상품 상세 조회
-app.get('/products/:id',wrapAsync (async (req, res, next) => {
+app.get('/products/:id', wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const product = await Product.findById(id)
     if (!product) {
@@ -58,16 +58,11 @@ app.get("/product/new", async (req, res) => {
 });
 
 // 상품 추가
-app.post("/product/new", async (req, res, next) => {
-    try {
-        const newProduct = new Product(req.body);
-        await newProduct.save();
-        res.send("making your product");
-    } catch (error) {
-        const customError = new AppError('Failed to fetch data', 500)
-        next(customError);
-    }
-});
+app.post("/product/new",wrapAsync (async (req, res, next) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.send("making your product");
+}));
 
 // 상품 업데이트 
 app.get("/product/:id/edit", async (req, res) => {
@@ -117,6 +112,17 @@ app.delete("/product/:id", async (req, res) => {
         res.status(500).send("DELETE FAIL")
     }
 });
+
+const handleValidationError = err => {
+    console.log(err);
+    return new AppError('Validation Failed...', 404)
+}
+
+app.use((err, req, res, next) => {
+    console.log(err.name);
+    if(err.name === 'ValidationError') err = handleValidationError(err);
+    next(err);
+})
 
 app.use((err, req, res, next) => {
     const { status = 500, message = 'Something went wrong' } = err;
