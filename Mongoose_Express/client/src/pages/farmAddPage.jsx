@@ -30,7 +30,7 @@ const FarmAddPage = () => {
         // 폼 데이터 전송
         try {
             await axios.post('http://localhost:4000/farm/new', formData);
-            navigate('/products');
+            navigate('/farm');
         } catch (error) {
             console.error('농장 추가 중 오류 발생:', error);
             setError(error.message)

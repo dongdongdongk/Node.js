@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-const ProductAddPage = () => {
+const FarmProductAddPage = () => {
     const navigate = useNavigate();
+    const params = useParams();
 
     // 상태 초기화
     const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const ProductAddPage = () => {
         }));
     };
 
-
+    console.log(params.id)
 
     // 폼 제출 핸들러
     const onSubmitHandler = async (e) => {
@@ -29,8 +30,8 @@ const ProductAddPage = () => {
 
         // 폼 데이터 전송
         try {
-            await axios.post('http://localhost:4000/product/new', formData);
-            navigate('/products');
+            await axios.post(`http://localhost:4000/farm/${params.id}/products/new`, formData);
+            navigate('/farm');
         } catch (error) {
             console.error('상품 추가 중 오류 발생:', error);
             setError(error.message)
@@ -44,7 +45,7 @@ const ProductAddPage = () => {
             
             
             <div>
-                <h1>ProductAddPage</h1>
+                <h1>FarmProductAddPage</h1>
                 <form onSubmit={onSubmitHandler}>
                     <label htmlFor="name">ProductName</label>
                     <input
@@ -83,4 +84,4 @@ const ProductAddPage = () => {
 
 };
 
-export default ProductAddPage;
+export default FarmProductAddPage;

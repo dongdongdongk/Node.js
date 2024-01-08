@@ -49,7 +49,7 @@ function wrapAsync(fn) {
 // 상품 상세 조회
 app.get('/products/:id', wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    const product = await Product.findById(id)
+    const product = await Product.findById(id).populate('farm')
     if (!product) {
         throw new AppError('Product Not Found', 404);
     }
@@ -125,11 +125,43 @@ app.post("/farm/new",wrapAsync (async (req, res, next) => {
     res.send("making your farm");
 }));
 
-// 삼품 조회
+// 농장 조회
 app.get('/farm', async (req, res) => {
     const farms = await Farm.find({})
     res.send(farms);
 });
+
+// 농장 상세 조회
+app.get('/farm/:id', wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const farm = await Farm.findById(id).populate('products')
+    if (!farm) {
+        throw new AppError('Product Not Found', 404);
+    }
+    res.send(farm);
+}));
+
+// 농장에 상품 등록
+app.post('/farm/:id/products/new', wrapAsync(async (req, res ,next) => {
+    const { id } = req.params;
+    const farm = await Farm.findById(id)
+    const { name, price, category } = req.body;
+    const product = new Product({name, price, category});
+    farm.products.push(product) // farm 에 product 넣어주기
+    product.farm = farm; // product 에 farm 넣어주기 양방향이니 둘다 해줘야한다 
+    await farm.save();
+    console.log(product)
+    await product.save();
+    res.send(farm)
+}))
+
+
+// 농장 삭제
+
+app.delete('/farm/:id', wrapAsync(async(req, res, next) => {
+    const { id } = req.params;
+    await Farm.findByIdAndDelete(id);
+}))
 
 const handleValidationError = err => {
     console.log(err);

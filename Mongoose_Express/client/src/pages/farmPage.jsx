@@ -18,8 +18,7 @@ const FarmPage = () => {
             <ul>
                 {farm.map((farm) => (
                     <li key={farm._id}>
-                        {/* <Link to={`/farm/${farm._id}`}>{farm.name}</Link> */}
-                        <p>{farm.name}</p>
+                         <Link to={`/farm/${farm._id}`}>{farm.name}</Link> 
                     </li>
                 ))}
             </ul>

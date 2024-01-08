@@ -35,6 +35,7 @@ const ProductDetailPage = () => {
                     <h1>{product.name}</h1>
                     <ul>
                         <li>Price : {product.price}</li>
+                        <li>Farm : {product.farm.name}</li>
                         <Link to={`/products?category=${product.category}`}>
                             Category : {product.category}
                         </Link>
