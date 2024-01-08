@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose; // ëª½êµ¬ìŠ¤ë¥¼ ìš”ì²­, DBì—°ê²°ì€ í•„ìš”ì—†ë‹¤ index ì—ì„œ ìš”ì²­í• ê±°ë‹ˆê¹Œ 
+const { Schema } = mongoose; // ¸ù±¸½º¸¦ ¿äÃ», DB¿¬°áÀº ÇÊ¿ä¾ø´Ù index ¿¡¼­ ¿äÃ»ÇÒ°Å´Ï±î 
 
-// ìƒí’ˆ ìŠ¤í‚¤ë§ˆ ì •ì˜ 
+// »óÇ° ½ºÅ°¸¶ Á¤ÀÇ 
 const productSchema = new Schema({
     name : {
         type : String,
@@ -23,8 +23,8 @@ const productSchema = new Schema({
     }
 })
 
-// ëª¨ë¸ ì •ì˜
+// ¸ğµ¨ Á¤ÀÇ
 const Product = mongoose.model('Product', productSchema);
 
-// ëª¨ë¸ì„ ë‹¤ë¥¸ê³³ì—ì„œ ì‚¬ìš© ê°€ëŠ¥í•˜ê²Œ ìµìŠ¤í¬íŠ¸ 
+// ¸ğµ¨À» ´Ù¸¥°÷¿¡¼­ »ç¿ë °¡´ÉÇÏ°Ô ÀÍ½ºÆ÷Æ® 
 module.exports = Product;

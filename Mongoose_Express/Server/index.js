@@ -13,6 +13,10 @@ const mongoose = require('mongoose');
 // Product ¸ðµ¨ ¿äÃ»
 const Product = require('./models/product');
 
+// ³óÀå ¸ðµ¨ ¿äÃ»
+
+const Farm = require('./models/farm');
+
 main().catch(err => console.log(err));
 
 async function main() {
@@ -111,6 +115,20 @@ app.delete("/product/:id", async (req, res) => {
         console.error('DELETE FAIL');
         res.status(500).send("DELETE FAIL")
     }
+});
+
+
+// ³óÀå Ãß°¡ 
+app.post("/farm/new",wrapAsync (async (req, res, next) => {
+    const newFarm = new Farm(req.body);
+    await newFarm.save();
+    res.send("making your farm");
+}));
+
+// »ïÇ° Á¶È¸
+app.get('/farm', async (req, res) => {
+    const farms = await Farm.find({})
+    res.send(farms);
 });
 
 const handleValidationError = err => {
