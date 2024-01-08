@@ -1,7 +1,8 @@
-const mongoose = require('mongoose'); // 몽구스를 요청, DB연결은 필요없다 index 에서 요청할거니까 
+const mongoose = require('mongoose');
+const { Schema } = mongoose; // 몽구스를 요청, DB연결은 필요없다 index 에서 요청할거니까 
 
 // 상품 스키마 정의 
-const productSchema = new mongoose.Schema({
+const productSchema = new Schema({
     name : {
         type : String,
         required : [true, 'name cannot be blank']
@@ -15,6 +16,10 @@ const productSchema = new mongoose.Schema({
         type : String,
         lowercase : true,
         enum : ['fruit', 'vegetable', 'dairy']
+    },
+    farm : {
+        type : Schema.Types.ObjectId,
+        ref : 'Farm' 
     }
 })
 
