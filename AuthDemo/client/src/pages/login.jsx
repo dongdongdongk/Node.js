@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Login = () => {
     const navigate = useNavigate();
 
     //상태 초기화 
@@ -18,7 +18,7 @@ const Register = () => {
             ...prevDate, [name]: value
         }));
     }
-    
+
     // 폼 제출 핸들러 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
@@ -27,8 +27,8 @@ const Register = () => {
 
         // 폼 데이터 전송
         try {
-            await axios.post('http://localhost:4000/register', formData);
-            navigate('/')
+            await axios.post('http://localhost:4000/login', formData);
+            // navigate('/')
         } catch (error) {
             console.error("SAVE FAIL", error);
         }
@@ -37,13 +37,13 @@ const Register = () => {
 
     return (
         <>
-            <h1>Login</h1>
+            <h1>SignUp</h1>
             <form onSubmit={onSubmitHandler}>
                 <div>
                     <label htmlFor="username">Enter Username:</label>
-                    <input 
-                        type="text" 
-                        name="username" 
+                    <input
+                        type="text"
+                        name="username"
                         id="username"
                         value={formData.username}
                         onChange={handleChange}
@@ -51,15 +51,15 @@ const Register = () => {
                 </div>
                 <div>
                     <label htmlFor="password">Enter PassWord:</label>
-                    <input 
-                        type="text" 
-                        name="password" 
+                    <input
+                        type="text"
+                        name="password"
                         id="password"
                         value={formData.password}
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit">Submit</button>
 
             </form>
         </>
@@ -67,5 +67,4 @@ const Register = () => {
 
 }
 
-
-export default Register;
+export default Login;
