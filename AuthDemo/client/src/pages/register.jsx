@@ -27,7 +27,7 @@ const Register = () => {
 
         // 폼 데이터 전송
         try {
-            await axios.post('http://localhost:4000/register', formData);
+            await axios.post('http://localhost:4000/register', formData ,{withCredentials: true});
             navigate('/')
         } catch (error) {
             console.error("SAVE FAIL", error);

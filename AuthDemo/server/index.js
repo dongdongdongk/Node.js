@@ -51,7 +51,7 @@ app.post('/register', async (req, res) => {
         password: hash
     })
     await user.save();
-    req.session.user_id = user._id;
+    // req.session.user_id = user._id; // 등록하고 바로 로그인 하려면 바로 발급
     
     
     // 클라이언트에게 해시값을 응답으로 보냅니다.
