@@ -26,7 +26,17 @@ function App() {
         }
       })
       .catch(err => console.error(err));
-  }, [loggedIn]); // 로그인 상태가 변경될 때마다 useEffect 실행
+  }, [{loggedIn}]); // 로그인 상태가 변경될 때마다 useEffect 실행
+
+  const logout = async () => {
+    try {
+      await axios.post('http://localhost:4000/logout',{},{withCredentials: true})
+      setLoggedIn(false)
+      navigate('/')
+    } catch (error) {
+      console.error("FAIL LOGOUT" , error)
+    }
+  }
 
   return (
     <div>
@@ -39,7 +49,7 @@ function App() {
           {/* 로그인 상태에 따라 로그인 또는 로그아웃 버튼 및 Secret 페이지로 이동하는 링크 표시 */}
           {loggedIn ? (
             <>
-              <button onClick={() => setLoggedIn(false)}>Logout</button>
+              <button onClick={() => logout()}>Logout</button>
               <Link to="/secret">Secret</Link>
             </>
           ) : (

@@ -92,6 +92,14 @@ app.get('/login/check', async (req, res) => {
     }
 });
 
+// 로그 아웃 
+app.post('/logout', (req, res) => {
+    console.log('Logout!!!!!!!!!!!!!!!!')
+    req.session.user_id = null; // 반드시 null 로 설정해야함
+    // req.session.destroy(); // 사용자에 대한 정보를 완전 삭제하고 로그아웃
+    res.status(200).json({ success: true, message: 'LogoutSuccess' });
+})
+
 
 
 
