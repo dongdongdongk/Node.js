@@ -27,8 +27,8 @@ const Login = () => {
 
         // 폼 데이터 전송
         try {
-            await axios.post('http://localhost:4000/login', formData);
-            // navigate('/')
+            await axios.post('http://localhost:4000/login', formData, {withCredentials: true});
+             navigate('/')
         } catch (error) {
             console.error("SAVE FAIL", error);
         }
@@ -37,7 +37,7 @@ const Login = () => {
 
     return (
         <>
-            <h1>SignUp</h1>
+            <h1>Login</h1>
             <form onSubmit={onSubmitHandler}>
                 <div>
                     <label htmlFor="username">Enter Username:</label>

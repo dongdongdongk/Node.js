@@ -37,7 +37,7 @@ const Register = () => {
 
     return (
         <>
-            <h1>Login</h1>
+            <h1>SignUp</h1>
             <form onSubmit={onSubmitHandler}>
                 <div>
                     <label htmlFor="username">Enter Username:</label>

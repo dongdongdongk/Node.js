@@ -5,12 +5,21 @@ const mongoose = require('mongoose');
 const app = express();
 const bcrypt = require('bcrypt');
 const session = require('express-session');
-const { default: reportWebVitals } = require('../client/src/reportWebVitals');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // 쿼리스트링 
-app.use(cors());
-app.use(session({ secret : 'secret'}))
+app.use(cors({
+    origin: 'http://localhost:3000', // 리액트 앱의 주소
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true, // 쿠키 전달을 허용하려면 true로 설정
+  }));
+const sessionOptions = {
+    secret: 'thisisnotagoodsecret',  // 세션을 암호화하는 데 사용되는 키
+    resave: false,  // 세션 데이터가 변경되지 않아도 항상 저장 여부를 설정
+    saveUninitialized: false  // 초기화되지 않은 세션도 저장 여부를 설정
+  };
+
+app.use(session(sessionOptions))
 
 main().catch(err => console.log(err));
 
@@ -44,6 +53,7 @@ app.post('/register', async (req, res) => {
     await user.save();
     req.session.user_id = user._id;
     
+    
     // 클라이언트에게 해시값을 응답으로 보냅니다.
     res.send(hash);
 })
@@ -54,27 +64,33 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     
     // MongoDB에서 해당 사용자를 찾습니다.
-    const user = await User.findOne({ username }) // 사용자명이 고유하다고 가정하고 있기 때문에 findOne
+    const user = await User.findOne({ username }); // 사용자명이 고유하다고 가정하고 있기 때문에 findOne
     
-    // 비밀번호를 bcrypt.compare를 사용해 해시와 비교하여 인증을 수행합니다.
-    const validPassword = await bcrypt.compare(password, user.password)
-    
-    // 인증이 성공하면 "Success"를, 실패하면 "Fail"을 클라이언트에게 응답으로 보냅니다.
-    if(validPassword) {
-        req.session.user.user_id = user._id;
-        res.send("Success")
-    } else {
-        res.send('Fail')
+    // 사용자가 존재하지 않거나 비밀번호가 일치하지 않으면 인증 실패로 응답합니다.
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.json({ success: false, message: 'Authentication failed' });
     }
-})
 
-app.get('/secret', (req, res) => {
-    if(!req.session.user_id) {
-        res.send("Fail")
+    // 인증이 성공하면 세션에 사용자 ID를 저장하고 클라이언트에게 성공과 사용자 정보를 응답합니다.
+    req.session.user_id = user._id;
+    res.json({ success: true, user: { username: user.username } });
+});
+
+// 사용자 로그인 확인 엔드포인트
+app.get('/login/check', async (req, res) => {
+    // 세션에서 사용자 ID를 가져옵니다.
+    const userId = req.session.user_id;
+    console.log(userId)
+
+    if (userId) {
+        // 세션에 사용자 ID가 존재하면 사용자 정보를 응답으로 전송합니다.
+        const user = await User.findById(userId);
+        res.json({ success: true, user: user.username });
     } else {
-
+        // 세션에 사용자 ID가 없으면 로그인되지 않은 상태로 응답합니다.
+        res.json({ success: false });
     }
-})
+});
 
 
 
